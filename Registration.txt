@@ -1,0 +1,82 @@
+------------AUTHENTICATION(USER REGISTRATION FORM)-----------
+1. Create a database "login"
+2.Check:( in .env file)
+
+    APP_LOG_LEVEL: debug
+	APP_URL:\\localhost
+	DB_CONNECTION:mysql
+	DB_HOST:127.0.0.1
+	DB_POSRT: 3306
+	DB_DATABASE_NAME:mydb
+	DB_USERNAME:root
+	DB_PASSWORD:
+	REDIS_HOST:127.0.0.1
+	REDIS_PORT:6379
+	
+3. Create Authentication
+   (cmd) php artisan make:auth
+4. Go and Check (localhost:8000) whether login system generated or not
+
+5. Go and check in migration table database/migration/..create_user_table
+
+6. Add the Schema in app\Providers\AppServiceProvider.php
+   
+    use Illuminate\Support\Facades\Schema;   
+
+7. Define the function boot() with default length of string in AppServiceProvider.php
+
+    public function boot()
+    {
+        schema::defaultStringLength(191);
+    }
+
+8. Create migration table
+
+   (cmd) php artisan migrate
+   (or)  php artisan migrate --force 
+   
+8.a.   php artisan cache:clear
+       php artisan config:cache
+
+9. Set: Config/database.php
+         
+		 'mysql' => [
+            'driver' => 'mysql',
+            'host' => env('DB_HOST', '127.0.0.1'),
+            'port' => env('DB_PORT', '3306'),
+            'database' => env('DB_DATABASE', 'laravel'),
+            'username' => env('DB_USERNAME', 'root'),
+            'password' => env('DB_PASSWORD', ''),
+            'unix_socket' => env('DB_SOCKET', ''),
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'prefix' => '',
+            'strict' => true,
+            'engine' => null,
+        ],
+     
+10. localhost:8000/register
+
+
+11. --------- Email Verification ---------------
+
+    ( .env )
+	
+	
+	    MAIL_DRIVER=sendmail
+		MAIL_HOST=smtp.gmail.com
+		MAIL_PORT=587
+		MAIL_USERNAME=bharadhiguhan@gmail.com
+		MAIL_PASSWORD=*******
+		MAIL_ENCRYPTION=tls
+		
+		
+12. Change the corresponding port and mail_server in Config/mail.php
+     
+
+
+
+
+	  
+
+   

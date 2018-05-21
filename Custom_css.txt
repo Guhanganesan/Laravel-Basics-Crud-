@@ -1,0 +1,20 @@
+ ------------- CUSTOM CSS ------------
+ 1. public/css/app.css
+    
+	add this into app.blade.php
+	
+ 2. app.blade.php
+    
+	<link rel="stylesheet" href="{{asset('css/app.css')}}></link>
+	
+ 3. resources/assets/app.scss
+ 
+    (cmd) npm install
+	
+ 4. resources/assets/sass/_variable.scss
+ 
+    -> Change the css properties here
+	
+ 5. Check:(cmd) npm run watch
+ 
+  

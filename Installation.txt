@@ -1,0 +1,39 @@
+Laravel Installation Procedure:
+
+1.  Install XAMPP Server
+2.  Visit to getcomposer.org and download composer-setup.exe
+    ( Dependency Manager for PHP )
+3.  or Create Project from command line interfacing
+    (cmd) composer global require "laravel/installer"
+	
+    (cmd) composer create-project --prefer-dist laravel/laravel blog "5.4.*"
+	
+4.  (cmd) htdocs\blog\ PHP artisan serve
+5.   To Run: http:\\localhost:8000
+6.  Open the project in visual studio code
+7.  Check .env file is available or not.
+8.  cd MyLaravel (cmd)
+9.  htdocs\MyLaravel\ php artisian key:generate
+10. Copy and paste in APP_KEY in .env file
+11. Get PHP Artisan Package:
+    cmd-> php artisian package:discover
+12. Check:(.env)
+    APP_LOG_LEVEL: debug
+	APP_URL:\\localhost
+	DB_CONNECTION:mysql
+	DB_HOST:127.0.0.1
+	DB_POSRT: 3306
+	DB_DATABASE_NAME:mydb
+	DB_USERNAME:root
+	DB_PASSWORD:
+	REDIS_HOST:127.0.0.1
+	REDIS_PORT:6379
+
+----------------------------------------
+
+	
+
+
+	
+          
+   

@@ -1,0 +1,116 @@
+
+             ROUTING AND BLADE TEMPLATING
+
+1. Create a new folder in views/layouts/app.blade.php
+   
+   ------------------- app.blade.php ----------------
+   
+        <body>
+		@yield('content')
+		</body>
+
+2. Install the extension of blade yield
+
+3. Create new file index.blade.php  in views/pages/index.blade.php
+
+    -------------- index.blade.php -------------
+	@extends('layouts.app')
+
+	@section('content')
+
+	<h2> Welcome to Laravel </h2>
+
+
+	@endsection 
+
+4. Similarly, pages/about.blade.php
+
+    ------------ about.blade.php ------------------
+	@extends('layouts.app')
+
+	@section('content')
+
+	<h2> This is my About Page</h2>
+
+	@endsection
+	
+5. pages/services.blade.php
+
+    ------------ services.blade.php ------------------
+	@extends('layouts.app')
+
+	@section('content')
+
+	<h2> This is my Service Page</h2>
+
+	@endsection
+	
+6. Return the view files from the controller
+
+
+   -------------- Http/Controllers/pagesController.php ------
+       <?php
+
+		namespace App\Http\Controllers;
+
+		use Illuminate\Http\Request;
+
+		class pagesController extends Controller
+		{
+			public function index()
+			{
+			   return view('pages.index');      // views/pages/index
+			}
+
+			public function about()
+			{
+			   return view('pages.about');
+			}
+			public function services()
+			{
+			   return view('pages.services');
+			}
+		}
+   
+   
+7. Navigate from through Route/web.php
+    
+	    <?php
+		Route::get('/','pagesController@index');
+		Route::get('/about','pagesController@about');
+		Route::get('/services','pagesController@services');
+		
+8. Create a new file views/layouts/nav.blade.php
+
+       ----------------- nav.blade.php ----------------
+	   
+		<a href='/'>Home</a>
+		<a href='/about'>About</a>
+		<a href='/services'>Services</a>
+		
+9. Include nav.blade.php in app.blade.php
+
+       -------------- app.blade.php -------------------
+		<body>
+		@yield('content')
+		@include('layouts.nav')
+		</body>
+		
+10. Check:
+          localhost:8000
+		  localhost:8000/about
+		  localhost:8000/services
+		  
+		  from
+		  the navigation tag <a>
+		  
+
+
+	   
+  
+
+   
+	
+	
+ 
+ 

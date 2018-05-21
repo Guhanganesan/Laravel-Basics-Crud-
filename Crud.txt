@@ -1,0 +1,219 @@
+( Do this after Installing the Login System (Authentications) )
+
+----------------- app/User.php -----------------------------
+
+   <?php
+
+	namespace App;
+
+	use Illuminate\Notifications\Notifiable;
+	use Illuminate\Foundation\Auth\User as Authenticatable;
+
+	class User extends Authenticatable
+	{
+		use Notifiable;
+
+		protected $fillable = [
+			'name', 'email', 'password',
+		];
+
+	protected $hidden = [
+			'password', 'remember_token',
+		];
+	}
+	
+------------------------- home.blade.php -------------------------
+
+@extends('layouts.app')
+
+@section('content')
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <div class="panel panel-default">
+                <div class="panel-heading">Dashboard</div>
+
+                <div class="panel-body">
+                    @if (session('status'))
+                        <div class="alert alert-success">
+                            {{ session('status') }}
+                        </div>
+                    @endif
+                    You are logged in!
+                    <a href="{{URL('users')}}" class="btn btn-sm btn-primary">view user</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection
+
+
+
+1) views/layouts/users.blade.php:
+        @extends('layouts.app')
+		@section('content')
+		<center>
+        <h3> CRUD NEW USERS</h3>
+         @if(Session::has('success'))
+             <h3>{{Session::get('success')}}</h3>
+         @endif
+		<table>
+        <tr>
+            <th>No</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>
+                <a href="{{URL('users/create')}}">new </a>
+            </th>
+        </tr>
+        @foreach($users as $key => $user)
+        <tr>
+            <td>{{$key+1}}</td>
+            <td>{{$user->name}}</td>
+            <td>{{$user->email}}</td>
+        <td> <a href="{{URL('users/'.$user->id.'/edit')}}">Edit</a>
+           
+        <form action="{{URL('users/'.$user->id)}}" method="POST">
+            {{csrf_field()}}
+            {{method_field('DELETE')}}
+            <button type="submit" > Delete</button>
+        </form>
+        </td>
+        </tr>
+        @endforeach   
+    </table>
+    @endsection
+
+              
+2.  views/layouts/create.blade.php
+
+    @extends('layouts.app')
+	@section('content')
+	<form action="{{URL('users')}}{{ isset($user) ? '/'.$user->id :''}}" method="POST">
+    {{csrf_field()}}
+    @if(isset($user))
+    {{method_field('PUT')}}
+    @endif
+
+    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+
+    <input type="hidden" name="_method" value="PUT">
+
+    Name:<input name="name" value="{{isset($user) ? $user->name :''}}"><br>
+    Email:<input name="email" value="{{isset($user) ? $user->email :''}}"><br>
+   
+    <button type="submit">add</button>
+	</form>
+	
+3. routes/web.php
+
+   Route::get('/', function () {
+    return view('welcome');
+   });
+
+	Auth::routes();
+
+	Route::get('/home', 'HomeController@index')->name('home');
+
+	Route::group(['prefix'=>''],function()
+   {
+    Route::resource('users','LearnController');
+    });
+	
+4. php artisan make:controller LearnController
+
+5. http\Controllers\LearnController.php
+
+   <?php
+
+	namespace App\Http\Controllers;
+
+	use Illuminate\Http\Request;
+	use App\User;
+	use Hash;
+	class LearnController extends Controller
+	{
+    
+    public function index()
+   {
+     $data['users'] = User::all();
+     return view('layouts.users',$data);
+   }
+    
+    public function create()
+    {
+        return view('layouts.create');
+    }
+
+   
+    public function store(Request $request)
+    {
+        $user=[
+            'name'=>$request->name,
+            'email'=>$request->email,
+            'password'=>Hash::make($request->name)
+        ];
+        $save=User::insert($user);
+        if($save)
+          return redirect('users');
+        else
+          return redirect()->back()-withInput();
+    }
+
+    
+    public function show($id)
+    {
+        //
+    }
+
+    public function edit($id)
+    {
+        $data['user']=User::find($id);
+        return view('layouts.create',$data);
+    }
+
+    
+    public function update(Request $request, $id)
+    {
+        if($request->has('password'))
+        {
+            $password=$request->password;
+            $user=[
+                'name'=>$request->name,
+                'email'=>$request->email,
+                'password'=>$password,
+            ];
+        }
+            else
+            {
+                $user=[
+                    'name'=>$request->name,
+                    'email'=>$request->email,
+                ];
+            }
+            $update=User::find($id)->update($user);
+            if($update)
+                   return redirect('users');
+            else
+                   return redirect()->back()->withInput();
+
+        
+    }
+
+    public function destroy($id)
+    {
+        $user = User::find($id);
+        if($user)
+        {
+            $user->delete();
+            $msg = "Successfully Deleted"; 
+        }
+        else
+        {
+            $msg="Check Please";
+        }
+        return redirect()->back()->withSuccess($msg);
+    }
+}
+

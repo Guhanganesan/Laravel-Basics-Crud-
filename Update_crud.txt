@@ -1,0 +1,76 @@
+1. PagesController.php
+   
+   public function edit($id)
+    {
+        $data['user']=User::find($id);
+        return view('layouts.create',$data);
+    }
+
+    public function update(Request $request, $id)
+    {
+        if($request->has('password'))
+        {
+            $password=$request->password;
+            $user=[
+                'name'=>$request->name,
+                'email'=>$request->email,
+                'password'=>$password,
+            ];
+        }
+            else
+            {
+                $user=[
+                    'name'=>$request->name,
+                    'email'=>$request->email,
+                ];
+            }
+            $update=User::find($id)->update($user);
+            if($update)
+                   return redirect('users');
+            else
+                   return redirect()->back()->withInput();
+
+        
+    }
+	
+2. create.blade.php
+
+    @extends('layouts.app')
+	@section('content')
+	<form action="{{URL('users')}}{{ isset($user) ? '/'.$user->id :''}}" method="POST">
+	  {{csrf_field()}}
+	  @if(isset($user))
+	  {{method_field('PUT')}}
+	  @endif
+		 <input type="hidden" name="_token" value="{{ csrf_token() }}">
+		 <!-- <input type="hidden" name="_method" value="PUT"> -->
+		 Name:<input name="name" value="{{isset($user) ? $user->name :''}}"><br>
+		 Email:<input name="email" value="{{isset($user) ? $user->email :''}}"><br>
+	   
+		<button type="submit">add</button>
+	</form>
+	@endsection
+	
+3. users.blade.php
+
+    @extends('layouts.app')
+	@section('content')
+	<table>
+		<tr>
+			<th> No</th>
+			<th> Name</th>
+			<th> Email</th>
+			<th> <a href="{{URL('users/create')}}">  +New </a></th>
+		</tr>
+		@foreach($users as $key=> $user)
+		<tr>
+			<td>{{$key+1}}</td>
+			<td>{{$user->name}}</td>
+			<td>{{$user->email}}</td>
+			<td> <a href="{{URL('users/'.$user->id.'/edit')}}">Edit</a>
+		</tr>
+		@endforeach
+	</table>
+	@endsection
+	
+

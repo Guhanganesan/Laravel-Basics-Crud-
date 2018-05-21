@@ -1,0 +1,24 @@
+--------------- CREATE -----------------
+
+1. Create controller: php artisan make:controller LearnController --resource
+
+2. Go to web.php and set controller action
+   
+   Route::group(['prefix'=>'users'],function()
+   {
+    Route::resource('/','LearnController');
+    });
+	
+3. resources/views/home.blade.php
+   
+   (add) <a href="{{URL('users')}}" class="btn btn-sm btn-primary">view user</a> 
+   
+4. LearnController.php
+
+   public function index()
+   {
+     return view('users');
+   }
+5. Create new file user.blade.php
+   
+   

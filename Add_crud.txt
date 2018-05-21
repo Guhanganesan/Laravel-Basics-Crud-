@@ -1,0 +1,94 @@
+					CRUD - ADD ELEMENTS TO DATABASE
+
+1. users.blade.php
+
+    @extends('layouts.app')
+	@section('content')
+	<table>
+		<tr>
+			<th> No</th>
+			<th> Name</th>
+			<th> Email</th>
+			<th> <a href="{{URL('users/create')}}">  +New </a></th>
+		</tr>
+		@foreach($users as $key=> $user)
+		<tr>
+			<td>{{$key+1}}</td>
+			<td>{{$user->name}}</td>
+			<td>{{$user->email}}</td>
+		</tr>
+		@endforeach
+	</table>
+	@endsection
+
+2. Create new file views/layouts/create.blade.php
+
+
+    @extends('layouts.app')
+	@section('content')
+	<form action="{{URL('users')}}" method="POST">
+	  
+		  
+		  <input type="hidden" name="_token" value="{{ csrf_token() }}">
+		Name:<input name="name"><br>
+		Email:<input name="email"><br>
+	   
+		<button type="submit">add</button>
+	</form>
+	@endsection
+	
+3. PagesController.php
+
+   <?php
+	namespace App\Http\Controllers;
+	use Illuminate\Http\Request;
+	use App\User;
+	use Hash;
+	class PagesController extends Controller
+	{
+		public function index()
+		{
+			$data['users'] = User::all();
+			return view('layouts.users', $data); // create users.blade.php
+		}
+		public function create()
+		{
+			return view('layouts.create');
+		}
+		public function store(Request $request)
+		{		
+			//dd($request->all());
+		   $user=[
+			   'name'=>$request->name,
+			   'email'=>$request->email,
+			   'password'=>Hash::make($request->password)
+		   ];
+		   $save= User::insert($user);
+		   if($save)
+		   return redirect('users');
+		   else
+		   return redirect()->back()->withInput();
+		}
+		public function show($id)
+		{
+
+		}
+	  }
+
+4. Routes/web.php
+
+    Route::get('/', function () {
+    return view('welcome');
+	});
+	Auth::routes();
+	Route::get('/home', 'HomeController@index')->name('home');
+	Route::group(['prefix'=>''], function()
+	{
+		 //Route::get('users','PagesController@index');
+		 //Route::get('users/add','PagesController@add');
+		Route::resource('users','PagesController');
+	});
+
+
+   
+    

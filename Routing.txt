@@ -1,0 +1,98 @@
+<?php
+
+/*
+Route::get('/', function () {
+
+       //return view('welcome'); // welcome.blade.php 
+       return "Welcome to Laravel";
+});
+*/
+Route::get('/who', function () {
+
+    return "How Are You";
+    
+});
+
+Route::get('name', function () {
+
+    return "My name is Guhan";
+    
+});
+
+Route::get('mobile', function () {
+
+    return "9791815599";
+});
+
+// From View 
+// Create a new file myfile(app/resources/myfile.blade.php) in view then call from here
+
+
+Route::get('checkfile',function()
+{
+    return view("myfile");
+});
+
+Route::get('checknewfile',function()
+{
+    return view('myviewfile');// new view file (app/resources/myviewfile.blade.php)
+});
+
+
+// Routing Parameters
+
+Route::get('/hello',function()
+{
+    return "Hello Guhan";
+});
+
+/*
+Route::get('/{name}',function($name)
+{
+    return "Hello Mr. ".$name;
+});
+*/
+
+Route::get('/{name}/{id}/{age}',function($name,$age,$id)
+{
+    return "Your name is:".$name." and your id is: ".$id." and your age is: ".$age;
+});
+
+
+// Regular Expression
+
+Route::get('/{mobile}', function($mobile)
+{
+    return "Your mobile number is :".$mobile;
+})->where('mobile','[0-9]+');
+
+Route::get('/user/{mobile}', function($mobile)
+{
+    return "Your mobile number is :".$mobile;
+})->where('mobile','[0-9]+');
+
+// Controller
+// (cmd) php artisan make:controller pagesController
+
+
+Route::get('/','pagesController@index');
+
+------------- myfile.blade.php -----------------------
+
+<h2>Guhan</h2>
+
+
+------------- welcome.blade.php (check) --------------------
+
+-------------- myviewfile.blade.php ---------------------------
+<h2> My new view file</h2>
+
+---------------- index.blade.php -------------------
+
+        <h2>Index Page </h2>
+		
+
+		
+		
+		
+

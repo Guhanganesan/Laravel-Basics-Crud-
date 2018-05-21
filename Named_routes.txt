@@ -1,0 +1,40 @@
+----------- Routes/web.php ----------
+<?php
+
+Route::get('/', function () {
+
+       return view('index'); 
+    
+});
+
+Route::get('/named',['as'=>'named.add', 'uses'=>'pagesController@add']);
+
+---------------views/index.blade.php -----------------
+
+<h2>Index Page </h2>
+
+<a href="{{route('named.add')}}">add</a>  // php artisan route:list
+
+-------------   Controllers/pagesController.php -------------
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+
+class pagesController extends Controller
+{
+    public function index()
+    {
+       // return "This is my Index page";
+       return view('index');// index file in resources/views
+    }
+
+    public function add()
+    {
+        return "20";
+    }
+}
+
+
+
